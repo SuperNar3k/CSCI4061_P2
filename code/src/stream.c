@@ -5,7 +5,7 @@
  * Each line will contain words as in Project 1 (Use STDOUT for writing).
  */
 void emit(char * inputFileName) {
-
+    //TODO
 }
 /***
  *
@@ -23,8 +23,12 @@ int main(int argc, char *argv[]) {
     * Each MapperInput/MapperID.txt file will contain file names.
     * example of one line will be test/T1/subfolder/0.txt.
     */
-    while(){
+    while(nMappers > 0){
+        //TODO: do stuff??
+
         emit(filePath);
+
+        nMappers--;
     }
     return EXIT_SUCCESS;
 }
