@@ -20,15 +20,11 @@ int main(int argc, char *argv[]) {
 
     mapperID = strtol(argv[1], NULL, 10);
     int nMappers = strtol(argv[2], NULL, 10);
-
     char* ipFdr = "MapperInput/Mapper";
-
-
    /* TODO: Read lines from Mapper files and get the file names that will be processes in emit function.
     * Each MapperInput/MapperID.txt file will contain file names.
     * example of one line will be test/T1/subfolder/0.txt.
     */
-
     char path[chunkSize];
     char mappersID[chunkSize]
     ltoa(mapperID, mappersID, 10);
@@ -43,7 +39,5 @@ int main(int argc, char *argv[]) {
     dup2(fds[1], 1)
     dup2(0, fds[0])    
     close(fp);
-
-
     return EXIT_SUCCESS;
 }
