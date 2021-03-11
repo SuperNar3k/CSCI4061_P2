@@ -37,11 +37,11 @@ int main(int argc, char *argv[]) {
     while(fgets(path, sizeof(path), fp) != NULL)
     {
         emit(ipFdr);
-        fds[2];
-        pipe(fds);
-        dup2(fds[1], 1)
-        dup2(0, fds[0])
     }
+    fds[2];
+    pipe(fds);
+    dup2(fds[1], 1)
+    dup2(0, fds[0])    
     close(fp);
 
 
