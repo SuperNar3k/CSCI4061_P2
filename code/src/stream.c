@@ -28,12 +28,22 @@ int main(int argc, char *argv[]) {
     * Each MapperInput/MapperID.txt file will contain file names.
     * example of one line will be test/T1/subfolder/0.txt.
     */
-    while(nMappers > 0){
-        //TODO: do stuff??
 
-        emit(filePath);
-
-        nMappers--;
+    char path[chunkSize];
+    char mappersID[chunkSize]
+    ltoa(mapperID, mappersID, 10);
+    strcat(ipFdr, mappersID);
+    int fp = open(ipFdr, "r");
+    while(fgets(path, sizeof(path), fp) != NULL)
+    {
+        emit(ipFdr);
+        fds[2];
+        pipe(fds);
+        dup2(fds[1], 1)
+        dup2(fds[0], 0)
     }
+    close(fp);
+
+
     return EXIT_SUCCESS;
 }
