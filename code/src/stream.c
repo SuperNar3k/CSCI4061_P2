@@ -40,7 +40,7 @@ int main(int argc, char *argv[]) {
         fds[2];
         pipe(fds);
         dup2(fds[1], 1)
-        dup2(fds[0], 0)
+        dup2(0, fds[0])
     }
     close(fp);
 
