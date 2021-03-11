@@ -5,7 +5,12 @@
  * Each line will contain words as in Project 1 (Use STDOUT for writing).
  */
 void emit(char * inputFileName) {
-    //TODO
+    FILE *fp = open(inputFileName, "r");
+    char line[chunkSize];
+    while(fgets(line, sizeof(line), fp) != NULL)
+    {
+        puts(line);
+    }
 }
 /***
  *
