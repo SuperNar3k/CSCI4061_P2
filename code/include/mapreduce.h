@@ -10,5 +10,7 @@
 #include "utils.h"
 
 char *inputFileDir;
+char filePaths[MaxNumInputFiles][maxFileNameLength];
+int emptyIdx = 0;
 
 #endif
