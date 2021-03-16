@@ -78,23 +78,23 @@ int main(int argc, char *argv[]) {
 		int pipe_result = pipe(pipes + 2 * i);
 		pid_t child = fork();
 		if (pipe_result < 0) {
-      fprintf(stderr, "ERROR: Failed to open pipe\n");
-      exit(1);
+      	fprintf(stderr, "ERROR: Failed to open pipe\n");
+     	exit(1);
     }
 
-		if (child == 0){
-			char mapperID = i + '1';
-			close(pipes[2 * i]); // Close read end of pipe for the streamer
-			dup2(pipes[2 * i + 1], STDOUT_FILENO); // Redirect output to the write end of the pipe
-			execl("stream", "stream", &mapperID, argv[1], NULL);
-			fprintf(stderr, "ERROR: failed to execute execl for streamers"); // only reached when execl fails
-			exit(EXIT_FAILURE);
-		}
-		else if (child < 0) { // error creating child
-      fprintf(stderr, "ERROR: failed to fork while spawning streamers\n");
-			exit(EXIT_FAILURE);
-		}
-		close(pipes[2 * i + 1]); // Close write end of pipe for the parent
+	if (child == 0){
+		char mapperID = i + '1';
+		close(pipes[2 * i]); // Close read end of pipe for the streamer
+		dup2(pipes[2 * i + 1], STDOUT_FILENO); // Redirect output to the write end of the pipe
+		execl("stream", "stream", &mapperID, argv[1], NULL);
+		fprintf(stderr, "ERROR: failed to execute execl for streamers"); // only reached when execl fails
+		exit(EXIT_FAILURE);
+	}
+	else if (child < 0) { // error creating child
+	fprintf(stderr, "ERROR: failed to fork while spawning streamers\n");
+		exit(EXIT_FAILURE);
+	}
+	close(pipes[2 * i + 1]); // Close write end of pipe for the parent
 	}
 
 	// Spawn nMappers mappers
@@ -109,14 +109,14 @@ int main(int argc, char *argv[]) {
 			exit(EXIT_FAILURE);
 		}
 		else if (child < 0) { // error creating child
-      fprintf(stderr, "ERROR: failed to fork while spawning mappers\n");
+      		fprintf(stderr, "ERROR: failed to fork while spawning mappers\n");
 			exit(EXIT_FAILURE);
 		}
 		close(pipes[2 * i]); // Close read end of pipe for the parent
 	}
 
 	// Wait for all children to complete execution
-	for (int i = 0; i < nMappers; i++){
+	for (int i = 0; i < nMappers*2; i++){
 		pid_t terminated_pid = wait(NULL);
 		if (terminated_pid == -1){ // error waiting for child
 			fprintf(stderr, "ERROR: failed to wait for mapper\n");
@@ -126,7 +126,8 @@ int main(int argc, char *argv[]) {
 
 	// Spawn nReducers reducers
 	for (int i = 0; i < nReducers; i++){
-		child = fork();
+		pid_t child = fork();
+
 		if (child == 0){
 			char reducerID = i + '1';
 			execl("reducer", "reducer", &reducerID, argv[2], NULL);
