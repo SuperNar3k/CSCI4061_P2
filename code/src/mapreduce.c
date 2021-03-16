@@ -97,7 +97,7 @@ int main(int argc, char *argv[]) {
 		close(pipes[2 * i + 1]); // Close write end of pipe for the parent
 	}
 
-
+	// Spawn nMappers mappers
 	for (int i = 0; i < nMappers; i++){
 		pid_t child = fork(); 
 
@@ -115,14 +115,37 @@ int main(int argc, char *argv[]) {
 		close(pipes[2 * i]); // Close read end of pipe for the parent
 	}
 
-	// TODO: wait for all children to complete execution
-	while(wait(NULL) > 0) {
-  }
+	// Wait for all children to complete execution
+	for (int i = 0; i < nMappers; i++){
+		pid_t terminated_pid = wait(NULL);
+		if (terminated_pid == -1){ // error waiting for child
+			fprintf(stderr, "ERROR: failed to wait for mapper\n");
+			exit(EXIT_FAILURE);
+		}
+	}
 
-	// TODO: spawn reducers
-
-	// TODO: wait for all children to complete execution
-
+	// Spawn nReducers reducers
+	for (int i = 0; i < nReducers; i++){
+		child = fork();
+		if (child == 0){
+			char reducerID = i + '1';
+			execl("reducer", "reducer", &reducerID, argv[2], NULL);
+			fprintf(stderr, "ERROR: failed to execute execl for reducers"); // only reached when execl fails
+			exit(EXIT_FAILURE);
+		}
+		else if (child < 0) {// error creating child
+      		fprintf(stderr, "ERROR: failed to fork while spawning reducers\n");
+			exit(EXIT_FAILURE);
+    	}
+	}
+	// Wait for all children to complete execution
+	for (int i = 0; i < nReducers; i++){
+		pid_t terminated_pid = wait(NULL);
+		if (terminated_pid == -1){ // error waiting for child
+			fprintf(stderr, "ERROR: failed to wait for reducer\n");
+			exit(EXIT_FAILURE);
+		}
+	}
 	
 
 	free(pipes);
