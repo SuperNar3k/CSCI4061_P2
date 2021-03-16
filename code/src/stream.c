@@ -8,12 +8,13 @@ void emit(char * inputFileName) {
     int lineLen;
     char line[chunkSize];
     FILE *fp = getFilePointer(inputFileName);
-
     while((lineLen = getLineFromFile(fp, line, chunkSize)) != -1){
-        printf("%s\n", line);
+        fprintf(stderr, "%s", line);
+        puts(line);
     }
     fclose(fp);
 }
+
 /***
  *
  * Stream process will read from the files created by Master.
@@ -26,13 +27,17 @@ int main(int argc, char *argv[]) {
     * Each MapperInput/MapperID.txt file will contain file names.
     * example of one line will be test/T1/subfolder/0.txt.
     */
-    char path[maxFileNameLength] = "\0";
-    strcat(path, ipFdr);
-    strcat(path, argv[1]);
-    strcat(path, ".txt");
+    char path[maxFileNameLength];
+    char line[chunkSize];
 
-    emit(path);
-    close(STDOUT_FILENO);
+    sprintf(path, "%s_%d.txt", ipFdr, mapperID); 
+    FILE *fp = getFilePointer(path);
 
+    while(fscanf(fp, "%s\n", line) != EOF){
+        emit(line);
+    }
+    fclose(fp);
+    
+    //close(STDIN_FILENO);
     return EXIT_SUCCESS;
 }

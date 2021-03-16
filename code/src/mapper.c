@@ -42,17 +42,19 @@ void parse(char * line) {
 }
 
 int main(int argc, char *argv[]) {
+    printf("Mapper\n");
     int lineLen;
     char line[chunkSize];
     mapperID = strtol(argv[1], NULL, 10);
 
     // you can read lines from pipes (from STDIN) (read lines in a while loop)
     // feel free to change
-    while((lineLen = getLineFromFile(STDIN_FILENO, line, chunkSize)) != -1) {
+    
+
+    while(scanf("%s\n", line) != EOF) {
         printf("%s \n", line);
         parse(line);
     }
-
     writeInterDSToFiles();
 
     return EXIT_SUCCESS;
