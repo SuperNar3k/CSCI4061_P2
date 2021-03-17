@@ -30,6 +30,30 @@ ssize_t getLineFromFile(FILE *fp, char *line, size_t len) {
 // The list of intermediate file names are stored in myTasks array
 int getReducerTasks(int nReducers, int reducerID, char *intermediateDir, char **myTasks) {
 
+    int myTaskidx = 0;
+    for (int i = reducerID - 1; i < 20; i = i + nReducers){
+        char reducerPath[maxFileNameLength];
+        sprintf(reducerPath, "%s/%d", intermediateDir, i); 
+
+        DIR* dr = opendir(reducerPath);
+
+        if(dr == NULL){
+		exit(EXIT_FAILURE);
+        }
+        
+        struct dirent* de;
+        while(((de = readdir(dr)) != NULL)){ // Traverses directory while there are still files
+            if(strcmp(de->d_name, ".") == 0 || strcmp(de->d_name, "..") == 0){
+                continue;
+            }
+            char* filename = malloc(maxFileNameLength * sizeof(char));
+            sprintf(filename, "%s/%s", reducerPath, de->d_name);
+            myTasks[myTaskidx] = filename;
+            myTaskidx++;
+	    }
+	    closedir(dr);
+    }
+    return myTaskidx;
 }
 
 

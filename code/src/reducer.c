@@ -5,6 +5,21 @@
  * The file should be in a corresponding folder in output/FinalData/ 
  */
 void writeFinalDSToFiles(void) {
+    for (int i = 0; i < MaxWordLength; i++){
+        char filePath[maxFileNameLength];
+        char line[chunkSize];
+        
+        if (finalDS[i] == 0){ //The reducer did not count words of length "i + 1" so it does not write a Final file for this length
+            continue;
+        }
+
+        // creates filePath to be of the form "output/FinalData/[wordlength].txt"
+        sprintf(filePath, "%s/%d.txt", finalDir, i + 1);
+        
+        // creates line to be of the form "wordLength finalcount"
+        sprintf(line, "%d %d", i + 1, finalDS[i]);
+        writeLineToFile(filePath, line);
+    }
 }
 
 
@@ -12,6 +27,16 @@ void writeFinalDSToFiles(void) {
  * Read lines from files, and calculate a total count for a specific word length
  */
 void reduce(char * intermediateFileName) {
+    int wordLength, wordCount;
+    char line[chunkSize];
+    FILE * fp = getFilePointer(intermediateFileName);
+
+    //reads and saves
+    fscanf (fp, "%d %d", &wordLength, &wordCount);
+    
+    finalDS[wordLength - 1] += wordCount;
+
+    fclose(fp);
 }
 
 int main(int argc, char *argv[]) {
@@ -22,8 +47,6 @@ int main(int argc, char *argv[]) {
 
     //getReducerTasks function returns a list of intermediate file names that this reducer should process
     char *myTasks[MaxNumIntermediateFiles] = {NULL};
-
-    //TODO: you can write your own getReducerTasks in utils file or change this however you like.
     int nTasks = getReducerTasks(nReducers, reducerID, intermediateDir, &myTasks[0]);
 
     int tIdx;
@@ -34,6 +57,5 @@ int main(int argc, char *argv[]) {
     }
 
     writeFinalDSToFiles();
-
 	return EXIT_SUCCESS;
 }
