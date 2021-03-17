@@ -30,8 +30,8 @@ This program uses two main functions in order to process large datasets: `parse`
 * Christopher Liu (liux3770)
 
 **Contribution:**
-* Yna Roxas: Part of reducer.c, formatting README.md
-* Narek Ohanyan: Part of reducer.c, commented code
-* Christopher Liu: Mapreduce.c and mapper.c  
+* Yna Roxas: stream.c, reducer.c, part of README.md
+* Narek Ohanyan: documentation, mapreducer.c, part of README.md
+* Christopher Liu: mapper.c, getReducerTasks()
   
 We tried our best to divide and conquer this project equally, giving each other more work if needed to make our contributions equal and fair to each other.
