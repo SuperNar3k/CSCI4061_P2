@@ -30,6 +30,8 @@ void reduce(char * intermediateFileName) {
     int wordLength, wordCount;
     char line[chunkSize];
     FILE * fp = getFilePointer(intermediateFileName);
+
+    //reads and saves
     fscanf (fp, "%d %d", &wordLength, &wordCount);
     finalDS[wordLength - 1] += wordCount;
     fclose(fp);
@@ -43,8 +45,6 @@ int main(int argc, char *argv[]) {
 
     //getReducerTasks function returns a list of intermediate file names that this reducer should process
     char *myTasks[MaxNumIntermediateFiles] = {NULL};
-
-    //TODO: you can write your own getReducerTasks in utils file or change this however you like.
     int nTasks = getReducerTasks(nReducers, reducerID, intermediateDir, &myTasks[0]);
 
     int tIdx;
@@ -55,6 +55,5 @@ int main(int argc, char *argv[]) {
     }
 
     writeFinalDSToFiles();
-
 	return EXIT_SUCCESS;
 }
