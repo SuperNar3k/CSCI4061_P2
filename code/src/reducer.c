@@ -27,6 +27,12 @@ void writeFinalDSToFiles(void) {
  * Read lines from files, and calculate a total count for a specific word length
  */
 void reduce(char * intermediateFileName) {
+    int wordLength, wordCount;
+    char line[chunkSize];
+    FILE * fp = getFilePointer(intermediateFileName);
+    fscanf (fp, "%d %d", &wordLength, &wordCount);
+    finalDS[wordLength - 1] += wordCount;
+    fclose(fp);
 }
 
 int main(int argc, char *argv[]) {
