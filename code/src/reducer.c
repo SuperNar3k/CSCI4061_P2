@@ -5,6 +5,21 @@
  * The file should be in a corresponding folder in output/FinalData/ 
  */
 void writeFinalDSToFiles(void) {
+    for (int i = 0; i < MaxWordLength; i++){
+        char filePath[maxFileNameLength];
+        char line[chunkSize];
+        
+        if (finalDS[i] == 0){ //The reducer did not count words of length "i + 1" so it does not write a Final file for this length
+            continue;
+        }
+
+        // creates filePath to be of the form "output/FinalData/[wordlength].txt"
+        sprintf(filePath, "%s/%d.txt", finalDir, i + 1);
+        
+        // creates line to be of the form "wordLength finalcount"
+        sprintf(line, "%d %d", i + 1, finalDS[i]);
+        writeLineToFile(filePath, line);
+    }
 }
 
 
