@@ -31,7 +31,7 @@ ssize_t getLineFromFile(FILE *fp, char *line, size_t len) {
 int getReducerTasks(int nReducers, int reducerID, char *intermediateDir, char **myTasks) {
 
     int myTaskidx = 0;
-    for (int i = reducerID - 1; i < 20; i = i + nReducers){
+    for (int i = reducerID; i <= 20; i = i + nReducers){
         char reducerPath[maxFileNameLength];
         sprintf(reducerPath, "%s/%d", intermediateDir, i); 
 
