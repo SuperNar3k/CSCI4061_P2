@@ -47,7 +47,7 @@ void createInput(int nMappers){
 			exit(EXIT_FAILURE);
 		}
 
-		for (int j = i; j < fileCount; j = j + 3){ 
+		for (int j = i; j < fileCount; j = j + nMappers){ 
 			fprintf(fp, "%s\n", filePaths[j]);
 		}
 		fclose(fp);
