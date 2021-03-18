@@ -64,9 +64,21 @@ int main(int argc, char *argv[]) {
 	int nMappers 	= strtol(argv[1], NULL, 10);
 	int nReducers 	= strtol(argv[2], NULL, 10);
 
-    inputFileDir = argv[3];
-    if(!isValidDir(inputFileDir))
-        exit(EXIT_FAILURE);
+  inputFileDir = argv[3];
+  if(!isValidDir(inputFileDir))
+    exit(EXIT_FAILURE);
+
+	// Number of mappers must be >= number of reducers
+	if (nMappers < nReducers){
+		fprintf(stderr, "Error: number of mappers must be >= number of reducers\n");
+		exit(EXIT_FAILURE);
+	}
+	
+	// Max amount of mappers/reducers is 20
+	if (nMappers > MaxNumProcesses || nReducers > MaxNumProcesses){ 
+		fprintf(stderr, "Error: maximum amount of mappers/reducers is 20");
+		exit(EXIT_FAILURE);
+	}
 
 	bookeepingCode();
 
@@ -80,8 +92,8 @@ int main(int argc, char *argv[]) {
 		int pipe_result = pipe(pipes + 2 * i);
 		pid_t child = fork();
 		if (pipe_result < 0) {
-      	fprintf(stderr, "ERROR: Failed to open pipe\n");
-     	exit(1);
+      fprintf(stderr, "ERROR: Failed to open pipe\n");
+     	exit(EXIT_FAILURE);
     }
 
 	if (child == 0){
@@ -111,7 +123,7 @@ int main(int argc, char *argv[]) {
 			exit(EXIT_FAILURE);
 		}
 		else if (child < 0) { // error creating child
-      		fprintf(stderr, "ERROR: failed to fork while spawning mappers\n");
+      fprintf(stderr, "ERROR: failed to fork while spawning mappers\n");
 			exit(EXIT_FAILURE);
 		}
 		close(pipes[2 * i]); // Close read end of pipe for the parent
@@ -137,7 +149,7 @@ int main(int argc, char *argv[]) {
 			exit(EXIT_FAILURE);
 		}
 		else if (child < 0) {// error creating child
-      		fprintf(stderr, "ERROR: failed to fork while spawning reducers\n");
+      fprintf(stderr, "ERROR: failed to fork while spawning reducers\n");
 			exit(EXIT_FAILURE);
     	}
 	}
