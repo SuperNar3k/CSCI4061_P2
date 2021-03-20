@@ -32,7 +32,7 @@ void reduce(char * intermediateFileName) {
     FILE * fp = getFilePointer(intermediateFileName);
 
     //reads and saves
-    fscanf (fp, "%d %d", &wordLength, &wordCount);
+    fscanf(fp, "%d %d", &wordLength, &wordCount);
     
     finalDS[wordLength - 1] += wordCount;
 
